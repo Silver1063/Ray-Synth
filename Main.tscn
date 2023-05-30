@@ -1,15 +1,29 @@
-[gd_scene format=2]
+[gd_scene load_steps=2 format=3 uid="uid://djdavsq0nrndt"]
+
+[ext_resource type="PackedScene" uid="uid://bvr3if5cnxtqx" path="res://PianoRoll.tscn" id="1_erufq"]
 
 [node name="Main" type="Node"]
 
 [node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="Panel" type="Panel" parent="Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control"]
+layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Control"]
-anchor_right = 1.0
-anchor_bottom = 1.0
+[node name="PianoRoll" parent="Control/VBoxContainer" instance=ExtResource("1_erufq")]
+layout_mode = 2

@@ -6,19 +6,29 @@
 ;   [section] ; section goes between []
 ;   param=value ; assign values to parameters
 
-config_version=4
+config_version=5
 
 [application]
 
 config/name="Ray Synth"
+config/features=PackedStringArray("4.0")
 run/low_processor_mode=true
 config/icon="res://icon.png"
 
+[debug]
+
+gdscript/warnings/unused_parameter=0
+gdscript/warnings/integer_division=0
+
 [display]
 
-window/size/width=1600
-window/size/height=900
-window/dpi/allow_hidpi=true
+window/size/viewport_width=1600
+window/size/viewport_height=900
+
+[editor]
+
+movie_writer/movie_file="C:/Users/Arkva/Documents/GitHub/Ray-Synth/movie.avi"
+movie_writer/fps=24
 
 [physics]
 
@@ -26,4 +36,5 @@ common/enable_pause_aware_picking=true
 
 [rendering]
 
-environment/default_environment="res://default_env.tres"
+anti_aliasing/quality/msaa_2d=1
+environment/defaults/default_environment="res://default_env.tres"
