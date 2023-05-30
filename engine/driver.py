@@ -24,7 +24,7 @@ def main() -> None:
 
     stream.write(data.tobytes())
 
-    #wavfile.write("Engine/output.wav", SAMPLERATE, data)
+    # wavfile.write("Engine/output.wav", SAMPLERATE, data)
 
     stream.stop_stream()
     stream.close()
@@ -58,7 +58,11 @@ def generate_sine_wave(pitch: str = "C4", duration: float = 1.0) -> numpy.ndarra
     volume: float = 0.05
 
     data: numpy.ndarray = volume * numpy.sin(
-        2 * numpy.pi * frequency * numpy.arange(length, dtype=numpy.float32) / SAMPLERATE
+        2
+        * numpy.pi
+        * frequency
+        * numpy.arange(length, dtype=numpy.float32)
+        / SAMPLERATE
     )
 
     return data
