@@ -11,8 +11,10 @@ config_version=5
 [application]
 
 config/name="Ray Synth"
+run/main_scene="res://Main.tscn"
 config/features=PackedStringArray("4.0")
 run/low_processor_mode=true
+boot_splash/show_image=false
 config/icon="res://icon.png"
 
 [debug]
