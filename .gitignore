@@ -1,3 +1,6 @@
+# other ignores
+data/
+
 # Godot-specific ignores
 .godot/
 .import/
