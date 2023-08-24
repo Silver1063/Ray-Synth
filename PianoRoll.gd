@@ -5,10 +5,12 @@ extends Control
 @export var playhead_position: float = 0.0
 var key_pattern: Array[String] = ["C", "x", "D", "x", "E", "F", "x", "G", "x", "A", "x", "B"]
 
-var lower_limit: int = 0
-var upper_limit: int = 88
+var octave_count: int = 10
 
-var NUMBER_OF_KEYS: int = upper_limit - lower_limit
+var lower_limit: int = 0
+var upper_limit: int = 24
+
+var NUMBER_OF_KEYS: int = upper_limit - lower_limit + 1
 
 var time_signature_numerator: int = 4
 var time_signature_denominator: int = 4
@@ -28,8 +30,6 @@ var measures = 16
 
 
 func _ready() -> void:
-	key_pattern.reverse()
-
 	vscrollbar.min_value = lower_limit
 	vscrollbar.max_value = upper_limit
 	vscrollbar.page = 16
@@ -62,23 +62,25 @@ func _draw() -> void:
 	var row_height: float = 900 / visible_row_count
 	
 	#draw the piano roll
-	for i in range(lower_limit, upper_limit):
+	for i in range(lower_limit, upper_limit + 1):
 		var row_position = Vector2(
-			0, (i * row_height) - (row_height * NUMBER_OF_KEYS * view_position.y)
+			0, (NUMBER_OF_KEYS - (i + 1)) * row_height - row_height * NUMBER_OF_KEYS * view_position.y
+			#* ((NUMBER_OF_KEYS - i - 1) - (NUMBER_OF_KEYS * view_position.y))
 		)
 		var row_size = Vector2(size.x, row_height)
+		
 		# if row_position.y > size.y or row_position.y < -row_height:
-		# continue
+		# 	continue
 
 		var row: Rect2 = Rect2(row_position, row_size)
-		var note_index: int = wrap(i, 0, 12)
+		var note_index: int = i % 12
 		var key: String = key_pattern[note_index]
 		var color: Color = BLACK if key_pattern[note_index] == "x" else WHITE
 
 		draw_rect(row, color, true, -1)
 		var c = 0.12
 		#print(key)
-		var octave: String = str(8 - ((i - 1) / 11))
+		var octave: String = str(i / 12)
 
 		if key == "C":
 			draw_string(
@@ -150,8 +152,9 @@ func _input(event: InputEvent) -> void:
 		if event.keycode == KEY_CTRL and not event.is_echo():
 			ctrl = not ctrl
 	if event is InputEventMouseMotion and panning:
-			vscrollbar.value += event.relative.y / 150
-			hscrollbar.value += event.relative.x / 150
+			#lerp(vscrollbar.value, vscrollbar.value - event.relative.y / 150, 0.5)
+			vscrollbar.value += -1 * event.relative.y / 150
+			hscrollbar.value += -1 * event.relative.x / 150
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_MIDDLE and not event.is_echo():
 			panning = not panning

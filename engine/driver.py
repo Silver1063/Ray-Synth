@@ -1,6 +1,7 @@
 from scipy.io import wavfile
 import numpy
 import pyaudio
+import sounddevice as sd
 
 
 SAMPLERATE: int = 48000
@@ -10,26 +11,29 @@ CHUNK: int = 1024
 
 
 def main() -> None:
-    pa: pyaudio.PyAudio = pyaudio.PyAudio()
+    # pa: pyaudio.PyAudio = pyaudio.PyAudio()
 
-    stream: pyaudio.Stream = pa.open(
-        rate=SAMPLERATE,
-        channels=CHANNELS,
-        format=FORMAT,
-        output=True,
-        frames_per_buffer=CHUNK,
-    )
+    # stream: pyaudio.Stream = pa.open(
+    #     rate=SAMPLERATE,
+    #     channels=CHANNELS,
+    #     format=FORMAT,
+    #     output=True,
+    #     frames_per_buffer=CHUNK,
+    # )
 
     data = numpy.concatenate((generate_sine_wave("A4", 2),))
 
-    stream.write(data.tobytes())
+    # stream.write(data.tobytes())
 
     # wavfile.write("Engine/output.wav", SAMPLERATE, data)
 
-    stream.stop_stream()
-    stream.close()
+    # stream.stop_stream()
+    # stream.close()
 
-    pa.terminate()
+    # pa.terminate()
+    
+    sd.play(data, SAMPLERATE)
+    sd.wait()
 
 
 def generate_sine_wave(pitch: str = "C4", duration: float = 1.0) -> numpy.ndarray:
@@ -53,7 +57,7 @@ def generate_sine_wave(pitch: str = "C4", duration: float = 1.0) -> numpy.ndarra
 
     frequency: float = A4 * (2 ** (offset / 12))
 
-    length = int(SAMPLERATE * duration)
+    length: int = int(SAMPLERATE * duration)
 
     volume: float = 0.05
 
