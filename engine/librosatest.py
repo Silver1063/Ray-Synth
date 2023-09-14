@@ -1,17 +1,13 @@
+import time
+import numpy as np
+import soundfile as sf
+import sounddevice as sd
+#from PIL import Image
+import matplotlib.pyplot as plt
+import librosa
 import os
 os.environ['LIBROSA_CACHE_DIR'] = 'C:/librosa_cache'
 
-
-import librosa
-import matplotlib.pyplot as plt
-from PIL import Image
-
-
-import sounddevice as sd
-import soundfile as sf
-import numpy as np
-
-import time
 
 voice = "Silver"
 voice_dir = f"data/{voice}/"
@@ -20,52 +16,50 @@ filename = f"data/{voice}/01.wav"
 output = f"data/{voice}/output.png"
 
 y, sr = librosa.load(filename, sr=None, dtype=np.float32)
-duration = librosa.get_duration(y=y,sr=sr)
-
+duration = librosa.get_duration(y=y, sr=sr)
 sample_count = np.size(y)
 
 
-#f0, vf, fp = librosa.pyin(y=y, fmin=64, fmax=2048)
+f0,_,_ = librosa.pyin(y=y, sr=sr, fmin=64, fmax=2048)
+plt.plot(f0)
+plt.show()
 
 
-# sd.play(y, sr)
-# sd.wait()
+chunk_length = int(4.0 * sr)
+chunk_overlap = int(0.5 * sr)
 
 
-chunk_time = 4
-chunk_size = np.shape(np.arange(sr * chunk_time))
+chunks = []
+index = 0
+while (index < sample_count):
+    new_chunk = np.copy(y[index: index+chunk_length])
+    
+    if(np.size(new_chunk) != chunk_length):
+        new_chunk.resize((chunk_length))
+    
+    chunks.append(new_chunk)
+    index += (chunk_length-chunk_overlap)
 
-length = np.size(y) % sr
 
 
-chunks = np.array_split(y, chunk_size)
+M_chunks = []
 
-n_fft: int = 2 ** 13
-n_mels: int = 1024
-hop_length = 256
-
-index=0
-for chunk in chunks:
-    M = librosa.feature.melspectrogram(y=chunk, sr=sr, n_fft=n_fft, hop_length=hop_length, n_mels=n_mels)
+index = 0
+for y in chunks:
+    M = librosa.feature.melspectrogram(y=y, sr=sr)
+    M_chunks.append(M)
+    
     M_dB = librosa.power_to_db(M, ref=np.max)
-    print(M_dB.shape)
     I = np.flip(M_dB, 0)
     plt.imsave(f"data/{voice}/output{index}.png", I)
     index += 1
 
+index = 0
+for M in M_chunks:
+    y = librosa.feature.inverse.mel_to_audio(M=M, sr=sr)
+    sf.write(f"data/{voice}/output{index}.wav", data=y, samplerate=sr)
+    index += 1
 
 
 
-
-# im = Image.fromarray(I)
-
-# im.save(output)
-
-# y = librosa.feature.inverse.mel_to_audio(M=M, sr=sr, n_fft=n_fft, hop_length=512)
-# sf.write(f"data/{voice}/output.wav", data=y, samplerate=sr)
-
-
-print(duration)
-
-# plt.plot(range(0, int(sr)), pitch[0])
-# plt.show()
+# 
