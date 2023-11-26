@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 import librosa
 import os
 
-os.environ["LIBROSA_CACHE_DIR"] = "C:/librosa_cache"
+#os.environ["LIBROSA_CACHE_DIR"] = "C:/librosa_cache"
 
 voice: str = "Silver"
 # voice_dir = f"data/{voice}/"
@@ -31,16 +31,21 @@ chunk_overlap: int = int(0.5 * sr)
 def main() -> None:
     show_pitch(y, sr)
     
-    # chunks: list[np.ndarray] = split_sample(y)
-    # M_chunks: list[np.ndarray] = generate_melspectrogram_chunks(chunks)
-    # y_chunks: list[np.ndarray] = synthesize_audio(M_chunks)
-    # render: np.ndarray = combine_chunks(y_chunks)
+    chunks: list[np.ndarray] = split_sample(y)
+    M_chunks: list[np.ndarray] = generate_melspectrogram_chunks(chunks)
+    y_chunks: list[np.ndarray] = synthesize_audio(M_chunks)
+    
+    # MFCC_chunks: list[np.ndarray] = generate_MFCC_chunks(chunks)
+    # y_chunks: list[np.ndarray] = synthesize_audio_from_mfcc(MFCC_chunks)
+    
+    
+    render: np.ndarray = combine_chunks(y_chunks)
 
-    # sf.write(f"data/{voice}/output.wav", data=render, samplerate=sr)
+    sf.write(f"data/{voice}/output.wav", data=render, samplerate=sr)
 
 
 def show_pitch(y: np.ndarray, sr: float) -> None:
-    f0, _, _ = librosa.pyin(y=y, sr=sr, fmin=64, fmax=2048)
+    f0, voiced_flag, voiced_probs = librosa.pyin(y=y, sr=sr, fmin=64, fmax=2048)
     cents = [1200 * math.log2(hz / 440) for hz in f0]
     plt.plot(cents)
     plt.ylim(1200 * math.log2(librosa.note_to_hz("C3") / 440), 0)
@@ -119,25 +124,54 @@ def generate_melspectrogram_chunks(chunks) -> list:
 
         M_chunks.append(M)
         index += 1
-        # M_dB = librosa.power_to_db(M, ref=np.max)
-        # I = np.flip(M_dB, 0)
-        # plt.imsave(f"data/{voice}/output{index}.png", I)
+        M_dB = librosa.power_to_db(M, ref=np.max)
+        I = np.flip(M_dB, 0)
+        plt.imsave(f"data/{voice}/output{index}.png", I)
 
     return M_chunks
+
+def generate_MFCC_chunks(chunks) -> list:
+    MFCC_chunks: list[np.ndarray] = []
+    index: int = 0
+    for y in chunks:
+        print("Generating MFCC", index)
+        MFCC: np.ndarray = librosa.feature.mfcc(
+            y=y, sr=sr, n_mfcc=40, n_fft=n_fft, hop_length=hop_length, n_mels=n_mels
+        )
+
+        MFCC_chunks.append(MFCC)
+        index += 1
+        # M_dB = librosa.power_to_db(M, ref=np.max)
+        I = np.flip(MFCC, 0)
+        plt.imsave(f"data/{voice}/output{index}.png", I)
+
+    return MFCC_chunks
 
 
 def synthesize_audio(chunks) -> list:
     y_chunks: list[np.ndarray] = []
 
-    index: int = 0
-    for M in chunks:
-        print("Generating Audio", index)
+    for i, M in enumerate(chunks):
+        print("Generating Audio", i)
         y: np.ndarray = librosa.feature.inverse.mel_to_audio(
             M=M, sr=sr, n_fft=n_fft, hop_length=hop_length
         )
+        y_chunks.append(y)
+
+    return y_chunks
+
+
+def synthesize_audio_from_mfcc(chunks) -> list:
+    y_chunks: list[np.ndarray] = []
+
+    index: int = 0
+    for i, MFCC in enumerate(chunks):
+        print("Generating Audio", i)
+        y: np.ndarray = librosa.feature.inverse.mfcc_to_audio(
+            mfcc=MFCC, sr=sr, n_fft=n_fft, hop_length=hop_length
+        )
 
         y_chunks.append(y)
-        index += 1
 
     return y_chunks
 
