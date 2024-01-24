@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://djdavsq0nrndt"]
 
-[ext_resource type="PackedScene" uid="uid://bvr3if5cnxtqx" path="res://PianoRoll.tscn" id="1_erufq"]
+[ext_resource type="PackedScene" uid="uid://bvr3if5cnxtqx" path="res://ScoreEditor/ScoreEditor.tscn" id="1_erufq"]
 
 [node name="Main" type="Node"]
 
@@ -28,5 +28,20 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="PianoRoll" parent="Control/VBoxContainer" instance=ExtResource("1_erufq")]
+[node name="ArrangementEditor" type="Control" parent="Control/VBoxContainer"]
 layout_mode = 2
+size_flags_vertical = 3
+
+[node name="TextureRect" type="TextureRect" parent="Control/VBoxContainer/ArrangementEditor"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ScoreEditor" parent="Control/VBoxContainer" instance=ExtResource("1_erufq")]
+clip_contents = true
+layout_mode = 2
+size_flags_stretch_ratio = 2.0
+BLACK = Color(0.14902, 0.14902, 0.14902, 1)

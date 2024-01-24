@@ -1,0 +1,58 @@
+[gd_resource type="Theme" load_steps=9 format=3 uid="uid://b4yrsntlo7dx6"]
+
+[ext_resource type="FontFile" uid="uid://6memd5jqi4cf" path="res://fonts/Poppins-Regular.ttf" id="1_vcqpx"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jvygv"]
+content_margin_top = 8.0
+bg_color = Color(0.168627, 0.168627, 0.168627, 1)
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_dr0qo"]
+color = Color(0.16, 0.048, 0.048, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rk7j1"]
+bg_color = Color(0.160784, 0.113725, 0.113725, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_stgwo"]
+bg_color = Color(0.247059, 0.0823529, 0.0666667, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1on57"]
+bg_color = Color(0.831373, 0.192157, 0.14902, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_f7cct"]
+bg_color = Color(0.341176, 0.133333, 0.0980392, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_vxyfu"]
+content_margin_left = 12.0
+content_margin_right = 12.0
+
+[resource]
+default_font = ExtResource("1_vcqpx")
+default_font_size = 24
+HBoxContainer/constants/separation = 6
+HScrollBar/styles/scroll = SubResource("StyleBoxFlat_jvygv")
+HSeparator/styles/separator = SubResource("StyleBoxLine_dr0qo")
+MarginContainer/constants/margin_bottom = 6
+MarginContainer/constants/margin_left = 6
+MarginContainer/constants/margin_right = 6
+MarginContainer/constants/margin_top = 6
+Panel/styles/panel = SubResource("StyleBoxFlat_rk7j1")
+PanelContainer/styles/panel = SubResource("StyleBoxFlat_stgwo")
+PopupMenu/constants/v_separation = 8
+PopupMenu/styles/hover = SubResource("StyleBoxFlat_1on57")
+PopupMenu/styles/panel = SubResource("StyleBoxFlat_f7cct")
+TabContainer/constants/side_margin = 16
+TabContainer/styles/tab_unselected = SubResource("StyleBoxEmpty_vxyfu")
+VBoxContainer/constants/separation = 6

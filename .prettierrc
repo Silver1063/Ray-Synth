@@ -1,0 +1,12 @@
+{
+  "semi": false,
+  "overrides": [
+    {
+      "files": "*.json",
+      "options": {
+        "semi": true,
+        "printWidth": 240
+      }
+    }
+  ]
+}

@@ -1,6 +1,0 @@
-[gd_resource type="Theme" load_steps=2 format=3 uid="uid://bigagttou27jx"]
-
-[ext_resource type="FontFile" uid="uid://6memd5jqi4cf" path="res://fonts/Poppins-Regular.ttf" id="1_c5cs1"]
-
-[resource]
-default_font = ExtResource("1_c5cs1")

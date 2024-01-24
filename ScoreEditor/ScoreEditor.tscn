@@ -1,0 +1,38 @@
+[gd_scene load_steps=2 format=3 uid="uid://bvr3if5cnxtqx"]
+
+[ext_resource type="Script" path="res://ScoreEditor/ScoreEditor.gd" id="1_tbcbn"]
+
+[node name="PianoRoll" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("1_tbcbn")
+
+[node name="VScrollBar" type="VScrollBar" parent="."]
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -8.0
+grow_horizontal = 0
+grow_vertical = 2
+max_value = 24.0
+page = 16.0
+
+[node name="HScrollBar" type="HScrollBar" parent="."]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -8.0
+grow_horizontal = 2
+grow_vertical = 0
+max_value = 16.0
+page = 4.0
