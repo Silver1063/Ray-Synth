@@ -12,7 +12,7 @@ config_version=5
 
 config/name="Ray Synth"
 config/tags=PackedStringArray("application")
-run/main_scene="res://LabelEditor/LabelEditor.tscn"
+run/main_scene="res://Main.tscn"
 config/features=PackedStringArray("4.2")
 run/low_processor_mode=true
 config/icon="res://icon.png"

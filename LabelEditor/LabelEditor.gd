@@ -6,13 +6,19 @@ extends Control
 @onready var waveform_view: Control = %WaveformView
 @onready var spectrogram_view: Control = %SpectrogramView
 
+@onready var default_page: float = %VisualizerScrollBar.page
+var zoom_index: int = 7
+var zoom_levels: Array[float] = [0.25, 0.33, 0.50, 0.66, 0.75, 0.80, 0.90, 1.0, 1.10, 1.25, 1.50, 1.75, 2.0, 2.50, 3.0, 4.0, 5.0]
+
+var audio_list: Dictionary = {}
 
 func _ready() -> void:
+	
 	set_process(false)
 	if not Engine.is_editor_hint():
 		get_viewport().files_dropped.connect(on_files_dropped)
 	
-	%PlayButton.pressed.connect(begin_playback)
+	%PlayButton.pressed.connect(start_playback)
 	%PauseButton.pressed.connect(pause_playback)
 	%StopButton.pressed.connect(stop_playback)
 	
@@ -62,10 +68,10 @@ func reload_shaders() -> void:
 	
 
 var playhead_position: float = 0.0
-func begin_playback() -> void:
+func start_playback():
 	set_process(true)
-	%VisualizerScrollBar.value = playhead_position
 	audio_stream_player.play(playhead_position)
+	move_playhead()
 
 func pause_playback() -> void:
 	set_process(false)
@@ -75,6 +81,7 @@ func pause_playback() -> void:
 func stop_playback() -> void:
 	set_process(false)
 	playhead_position = 0.0
+	move_playhead()
 	%VisualizerScrollBar.value = playhead_position
 	audio_stream_player.stop()
 
@@ -93,11 +100,23 @@ func on_files_dropped(files) -> void:
 		return
 	var audio_stream_wav: AudioStreamWAV = AudioStreamWAVLoader.load_from_path(files[0])
 	audio_stream_player.stream = audio_stream_wav
+	audio_list[files[0]] = audio_stream_wav
 	reload_shaders()
+	var audio_label: Label = Label.new()
+	audio_label.text = files[0]
+	%Audio.add_child(audio_label)
 	print(files)
 
 func _process(delta) -> void:
-	%VisualizerScrollBar.value += delta
+	move_playhead()
+	#if playhead_position >= %VisualizerScrollBar.value + %VisualizerScrollBar.page:
+		#%VisualizerScrollBar.value += %VisualizerScrollBar.page
+
+func move_playhead() -> void:
+	if %Playhead.position.x > %Playhead.get_parent_area_size().x:
+		%VisualizerScrollBar.value += %VisualizerScrollBar.page
+	playhead_position = audio_stream_player.get_playback_position()
+	%Playhead.position.x = %Playhead.get_parent_area_size().x * (playhead_position - %VisualizerScrollBar.value) / %VisualizerScrollBar.page
 
 var panning: bool = false
 func _input(event):
@@ -110,11 +129,17 @@ func _input(event):
 		panning = false
 	
 	if event.is_action_pressed("zoom_in"):
-		%VisualizerScrollBar.page -= 2.0
+		zoom_index -= 1
+		zoom_index = clamp(zoom_index, 0, zoom_levels.size()-1)
+		%VisualizerScrollBar.page = default_page * zoom_levels[zoom_index]
+	
 	elif event.is_action_pressed("zoom_out"):
-		%VisualizerScrollBar.page += 2.0
+		zoom_index += 1
+		zoom_index = clamp(zoom_index, 0, zoom_levels.size()-1)
+		%VisualizerScrollBar.page = default_page * zoom_levels[zoom_index]
+		
 	elif event.is_action_pressed("scroll_up"):
-		%VisualizerScrollBar.value -= 1.0
+		%VisualizerScrollBar.value -= zoom_levels[zoom_index]
 	elif event.is_action_pressed("scroll_down"):
-		%VisualizerScrollBar.value += 1.0
+		%VisualizerScrollBar.value += zoom_levels[zoom_index]
 	

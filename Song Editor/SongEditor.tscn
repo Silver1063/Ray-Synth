@@ -1,0 +1,27 @@
+[gd_scene load_steps=2 format=3 uid="uid://b3nmqbhvervh2"]
+
+[ext_resource type="PackedScene" uid="uid://bvr3if5cnxtqx" path="res://Song Editor/ScoreEditor.tscn" id="1_1g2yr"]
+
+[node name="Song Editor" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VSplitContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PlaceHolder" type="Control" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.23
+
+[node name="PianoRoll" parent="VBoxContainer" instance=ExtResource("1_1g2yr")]
+layout_mode = 2
