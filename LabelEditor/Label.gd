@@ -8,7 +8,8 @@ var dragging: bool = false
 var start_bar_selected: bool = false
 var end_bar_selected: bool = false
 
-func _input(event):
+
+func _gui_input(event):
 	if event is InputEventMouseButton:
 		if event.is_action_pressed("left_click"):
 			dragging = true

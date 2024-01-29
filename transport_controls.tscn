@@ -1,0 +1,40 @@
+[gd_scene load_steps=5 format=3 uid="uid://cudhfw17vh4h0"]
+
+[ext_resource type="Texture2D" uid="uid://bw7t5aw4fae6f" path="res://icons/Play.svg" id="1_cwg0b"]
+[ext_resource type="Script" path="res://transport_controls.gd" id="1_u6kao"]
+[ext_resource type="Texture2D" uid="uid://5lq3q85d5do1" path="res://icons/Pause.svg" id="2_k1xf4"]
+[ext_resource type="Texture2D" uid="uid://clk58m86f63kd" path="res://icons/Stop.svg" id="3_tcgmi"]
+
+[node name="TransportControls" type="PanelContainer"]
+size_flags_horizontal = 0
+script = ExtResource("1_u6kao")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="PlayButton" type="Button" parent="MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+icon = ExtResource("1_cwg0b")
+icon_alignment = 1
+
+[node name="PauseButton" type="Button" parent="MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+icon = ExtResource("2_k1xf4")
+icon_alignment = 1
+
+[node name="StopButton" type="Button" parent="MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+icon = ExtResource("3_tcgmi")
+icon_alignment = 1
+
+[node name="RecordButton" type="Button" parent="MarginContainer/HBoxContainer"]
+layout_mode = 2
+toggle_mode = true
+text = "Rec"

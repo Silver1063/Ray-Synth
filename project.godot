@@ -17,6 +17,10 @@ config/features=PackedStringArray("4.2")
 run/low_processor_mode=true
 config/icon="res://icon.png"
 
+[autoload]
+
+Ray="*res://ray.gd"
+
 [debug]
 
 gdscript/warnings/unused_parameter=0

@@ -1,12 +1,11 @@
-[gd_scene load_steps=15 format=3 uid="uid://2kb00p2l16ij"]
+[gd_scene load_steps=14 format=3 uid="uid://2kb00p2l16ij"]
 
-[ext_resource type="Script" path="res://LabelEditor/LabelEditor.gd" id="1_fsypw"]
+[ext_resource type="Script" path="res://LabelEditor/label_editor.gd" id="1_dh4ot"]
+[ext_resource type="PackedScene" uid="uid://cudhfw17vh4h0" path="res://transport_controls.tscn" id="2_2l67k"]
 [ext_resource type="Shader" path="res://LabelEditor/waveform.gdshader" id="3_7asrn"]
-[ext_resource type="Texture2D" uid="uid://bw7t5aw4fae6f" path="res://icons/Play.svg" id="4_26dll"]
+[ext_resource type="Script" path="res://LabelEditor/visualizer_view.gd" id="3_r3tf5"]
 [ext_resource type="Shader" path="res://LabelEditor/spectrogram.gdshader" id="4_hhcal"]
-[ext_resource type="Texture2D" uid="uid://5lq3q85d5do1" path="res://icons/Pause.svg" id="5_su6y2"]
-[ext_resource type="Texture2D" uid="uid://clk58m86f63kd" path="res://icons/Stop.svg" id="6_6n72u"]
-[ext_resource type="PackedScene" uid="uid://cvp2aa8nesex8" path="res://LabelEditor/Label.tscn" id="8_hagxq"]
+[ext_resource type="Script" path="res://LabelEditor/playhead.gd" id="6_su37s"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_r16o1"]
 shader = ExtResource("3_7asrn")
@@ -60,9 +59,10 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_fsypw")
+script = ExtResource("1_dh4ot")
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+unique_name_in_owner = true
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 1
@@ -98,43 +98,8 @@ item_4/id = 4
 
 [node name="About" type="PopupMenu" parent="MarginContainer/VBoxContainer/MenuBar"]
 
-[node name="TransportPanelContainer" type="PanelContainer" parent="MarginContainer/VBoxContainer"]
+[node name="TransportControls" parent="MarginContainer/VBoxContainer" instance=ExtResource("2_2l67k")]
 layout_mode = 2
-size_flags_horizontal = 0
-
-[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/TransportPanelContainer"]
-layout_mode = 2
-
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TransportPanelContainer/MarginContainer"]
-layout_mode = 2
-size_flags_horizontal = 4
-
-[node name="PlayButton" type="Button" parent="MarginContainer/VBoxContainer/TransportPanelContainer/MarginContainer/HBoxContainer"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(40, 40)
-layout_mode = 2
-icon = ExtResource("4_26dll")
-icon_alignment = 1
-
-[node name="PauseButton" type="Button" parent="MarginContainer/VBoxContainer/TransportPanelContainer/MarginContainer/HBoxContainer"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(40, 40)
-layout_mode = 2
-icon = ExtResource("5_su6y2")
-icon_alignment = 1
-
-[node name="StopButton" type="Button" parent="MarginContainer/VBoxContainer/TransportPanelContainer/MarginContainer/HBoxContainer"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(40, 40)
-layout_mode = 2
-icon = ExtResource("6_6n72u")
-icon_alignment = 1
-
-[node name="RecordButton" type="Button" parent="MarginContainer/VBoxContainer/TransportPanelContainer/MarginContainer/HBoxContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-toggle_mode = true
-text = "Rec"
 
 [node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
@@ -232,9 +197,11 @@ item_2/text = "Logarithmic"
 item_2/id = 2
 
 [node name="VisualizerView" type="Control" parent="MarginContainer/VBoxContainer/HBoxContainer/ViewPanelContainer/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 10.0
+script = ExtResource("3_r3tf5")
 
 [node name="WaveformView" type="TextureRect" parent="MarginContainer/VBoxContainer/HBoxContainer/ViewPanelContainer/VBoxContainer/HBoxContainer/VisualizerView"]
 unique_name_in_owner = true
@@ -273,11 +240,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-
-[node name="Label" parent="MarginContainer/VBoxContainer/HBoxContainer/ViewPanelContainer/VBoxContainer/HBoxContainer/VisualizerView/LabelView" instance=ExtResource("8_hagxq")]
-layout_mode = 1
-offset_left = 167.0
-offset_right = -691.0
+mouse_filter = 1
 
 [node name="Playhead" type="ColorRect" parent="MarginContainer/VBoxContainer/HBoxContainer/ViewPanelContainer/VBoxContainer/HBoxContainer/VisualizerView"]
 unique_name_in_owner = true
@@ -286,7 +249,9 @@ anchors_preset = 9
 anchor_bottom = 1.0
 offset_right = 6.0
 grow_vertical = 2
+mouse_default_cursor_shape = 10
 color = Color(0.368627, 0, 0.227451, 1)
+script = ExtResource("6_su37s")
 
 [node name="Meter" type="ColorRect" parent="MarginContainer/VBoxContainer/HBoxContainer/ViewPanelContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
