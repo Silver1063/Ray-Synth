@@ -24,8 +24,7 @@ static func load_from_path(path: String) -> AudioStreamWAV:
 			break
 		offset += 8 + chunk_size
 	
-	print(content["bits_per_sample"],"\n",content["sample_rate"],"\n",content["num_channels"])
-	
+	print(content["bits_per_sample"], "\n", content["sample_rate"], "\n", content["num_channels"])
 	
 	var wav: AudioStreamWAV = AudioStreamWAV.new()
 	wav.data = content["data"]
@@ -34,3 +33,22 @@ static func load_from_path(path: String) -> AudioStreamWAV:
 	wav.stereo = bool(content["num_channels"] - 1)
 	
 	return wav
+
+static func audio_to_texture(audio: AudioStreamWAV) -> ImageTexture:
+	var byte_data: PackedByteArray = audio.data
+	var max_value: int = (2 ** 15) - 1 
+	var sample_count: float = byte_data.size() / 2
+	
+	var power: int = ceili(log(sample_count) / log(2))
+	if not power % 2 == 0:
+		power += 1
+	var axis_size: int = 2 ** (power / 2)
+	
+	var img: Image = Image.create(axis_size, axis_size, false, Image.FORMAT_RF)
+	for i in range(0, byte_data.size(), 2):
+		var value: float = byte_data.decode_s16(i) / float(max_value)
+		img.set_pixel((i / 2) % axis_size, (i / 2) / axis_size, Color(value, 0.0, 0.0))
+	
+	var audio_texture: ImageTexture = ImageTexture.create_from_image(img)
+	return audio_texture
+
