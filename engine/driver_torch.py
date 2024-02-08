@@ -107,7 +107,7 @@ def main() -> None:
     # n_stft: int = (n_fft // 2) + 1
 
     # Visualizations
-    visualize: bool = False
+    visualize: bool = True
     if visualize:
         fig, axs = plt.subplots(2, 1)
         # plot_waveform(y, sr, title="Original waveform", ax=axs[0])

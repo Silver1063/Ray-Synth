@@ -1,7 +1,5 @@
 shader_type canvas_item;
 
-uniform float a = 0;
-
 const int LINEAR = 0;
 const int MEL_SCALE = 1;
 const int LOGARITHMIC = 2;
@@ -79,6 +77,6 @@ void fragment() {
 	float v = log(1.0+length(value));
 	//= sqrt(v / (1.0 + v));
 	//v = clamp(v, 0.0, 1.0);
-	COLOR.rgb = texture(spectrogram_grad, vec2(v,0)).rgb;
+	COLOR.rgb = spectrogram_color.rgb * v;
 	
 }

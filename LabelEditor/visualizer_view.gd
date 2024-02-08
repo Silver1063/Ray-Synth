@@ -41,29 +41,14 @@ func stop() -> void:
 	audio_stream_player.stop()
 	Ray.playhead_position = audio_stream_player.get_playback_position()
 	%VisualizerScrollBar.value = Ray.playhead_position
-	
-	
+
 
 func reload_shaders() -> void:
 	%VisualizerScrollBar.max_value = audio_stream_player.stream.get_length()
 	
-	var byte_data: PackedByteArray = audio_stream_player.stream.data
-	var max_value: int = (2 ** 15) - 1 
-	var sample_count: float = byte_data.size() / 2
+	var audio_texture: ImageTexture = AudioStreamWAVLoader.audio_to_texture(audio_stream_player.stream)
 	
-	var power: int = ceili(log(sample_count) / log(2))
-	if not power % 2 == 0:
-		power += 1
-	var axis_size: int = 2 ** (power / 2)
-	
-	var img: Image = Image.create(axis_size, axis_size, false, Image.FORMAT_RF)
-	for i in range(0, byte_data.size(), 2):
-		var value: float = byte_data.decode_s16(i) / float(max_value)
-		img.set_pixel((i / 2) % axis_size, (i / 2) / axis_size, Color(value, 0.0, 0.0))
-	
-	var audio_texture: ImageTexture = ImageTexture.new()
-	audio_texture.set_image(img)
-	
+	var sample_count: float = audio_stream_player.stream.data.size() / 2
 	var sample_rate: float = float(audio_stream_player.stream.mix_rate)
 	
 	waveform_view.material.set_shader_parameter("offset", 0.0)
@@ -71,22 +56,16 @@ func reload_shaders() -> void:
 	waveform_view.material.set_shader_parameter("sample_rate", sample_rate)
 	waveform_view.material.set_shader_parameter("sample_count", sample_count)
 	waveform_view.material.set_shader_parameter("audio_texture", audio_texture)
-	
-	spectrogram_view.material.set_shader_parameter("offset", 0.0)
-	spectrogram_view.material.set_shader_parameter("width", 10.0)
-	spectrogram_view.material.set_shader_parameter("sample_rate", sample_rate)
-	spectrogram_view.material.set_shader_parameter("sample_count", sample_count)
-	spectrogram_view.material.set_shader_parameter("audio_texture", audio_texture)
 
 func on_scroll(value: float) -> void:
 	Ray.playhead_position = value
 	%WaveformView.material.set_shader_parameter("offset", value)
-	%SpectrogramView.material.set_shader_parameter("offset", value)
+	#%SpectrogramView.material.set_shader_parameter("offset", value)
 
 func on_scroll_change():
 	var page: float = %VisualizerScrollBar.page
 	%WaveformView.material.set_shader_parameter("width", page)
-	%SpectrogramView.material.set_shader_parameter("width", page)
+	#%SpectrogramView.material.set_shader_parameter("width", page)
 
 func move_playhead() -> void:
 	print("here")

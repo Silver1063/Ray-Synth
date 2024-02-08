@@ -15,6 +15,9 @@ signal stop
 signal record
 signal playhead_position_changed()
 
+var project: Dictionary = {}
+
+
 func _ready() -> void:
 	pass
 

@@ -1,0 +1,32 @@
+[gd_scene load_steps=4 format=3 uid="uid://blije8q760ns1"]
+
+[ext_resource type="Shader" path="res://LabelEditor/spectrogram.gdshader" id="1_lodyk"]
+[ext_resource type="Script" path="res://ColorRect.gd" id="2_tw0j4"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_7soyv"]
+shader = ExtResource("1_lodyk")
+shader_parameter/mode = 0
+shader_parameter/spectrogram_color = Color(1, 1, 1, 1)
+shader_parameter/offset = 0.0
+shader_parameter/width = 10.0
+shader_parameter/sample_rate = null
+shader_parameter/sample_count = null
+shader_parameter/max_window = 50.0
+
+[node name="Control" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_7soyv")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("2_tw0j4")
