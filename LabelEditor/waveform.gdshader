@@ -5,13 +5,10 @@ uniform vec4 waveform_color: source_color = vec4(1.0);
 
 // in seconds moves and zooms the waveform
 uniform float offset = 0.0;
-uniform float width = 10.0;
+uniform float page = 10.0;
 
 // properties of audio
 uniform float sample_rate;
-
-// length of average window
-uniform float window = 6;
 
 uniform sampler2D audio_texture: hint_default_black, filter_nearest;
 
@@ -23,16 +20,18 @@ float get_sample(int n) {
 }
 
 void fragment() {
-	int sample = int(UV.x * width * sample_rate + offset * sample_rate);
+	float window = page;
+	int sample = int(UV.x * page * sample_rate + offset * sample_rate);
 	int samples = int((window * sample_rate) / (1000.0 * 2.0));
 	
-	float value = 0.0;
+	vec2 value = vec2(0.0, 0.0);
 	for (int i = -samples; i <= samples; i++) {
-		value += abs(get_sample(sample + i));
+		float sample = get_sample(sample + i);
+		value.x = min(value.x, sample);
+		value.y = max(value.y, sample);
 	}
-	value = value / float(samples);
 	
-	if (abs(UV.y - 0.5) <= value) {
+	if (UV.y - 0.5 >= value.x && UV.y - 0.5 <= value.y ) {
 		COLOR = waveform_color;
 	}
 	else {
