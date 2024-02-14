@@ -7,7 +7,6 @@ uniform int mode = 0;
 
 // color of waveform duh
 uniform vec4 spectrogram_color: source_color = vec4(1.0);
-uniform sampler2D spectrogram_grad: hint_default_black;
 
 // in seconds moves and zooms the waveform
 uniform float offset = 0.0;
@@ -74,9 +73,8 @@ void fragment() {
 		value += get_sample(sample + i) * hann * vec2(cos(coefficient * t), -sin(coefficient * t));
 	}
 	
-	float v = log(1.0+length(value));
 	//= sqrt(v / (1.0 + v));
 	//v = clamp(v, 0.0, 1.0);
-	COLOR.rgb = spectrogram_color.rgb * v;
+	COLOR.rgb = vec3(pow(length(value), 2));
 	
 }
