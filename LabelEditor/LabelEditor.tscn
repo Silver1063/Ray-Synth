@@ -1,26 +1,33 @@
-[gd_scene load_steps=12 format=3 uid="uid://2kb00p2l16ij"]
+[gd_scene load_steps=15 format=3 uid="uid://2kb00p2l16ij"]
 
 [ext_resource type="Script" path="res://LabelEditor/label_editor.gd" id="1_dh4ot"]
 [ext_resource type="PackedScene" uid="uid://cudhfw17vh4h0" path="res://transport_controls.tscn" id="2_2l67k"]
-[ext_resource type="AudioStream" uid="uid://boxisxlx6vw1m" path="res://data/Silver/01.wav" id="2_scm1q"]
+[ext_resource type="AudioStream" uid="uid://c6gibhhnqgmn0" path="res://debug/01.wav" id="2_eguwb"]
 [ext_resource type="Shader" path="res://LabelEditor/waveform.gdshader" id="3_7asrn"]
 [ext_resource type="Script" path="res://LabelEditor/visualizer_view.gd" id="3_r3tf5"]
 [ext_resource type="Shader" path="res://LabelEditor/spectrogram_prerendered.gdshader" id="5_gmqmv"]
 [ext_resource type="Script" path="res://LabelEditor/spectrogram_view.gd" id="6_ixfxd"]
+[ext_resource type="Script" path="res://LabelEditor/waveform_view.gd" id="6_j2wj6"]
 [ext_resource type="Script" path="res://LabelEditor/playhead.gd" id="6_su37s"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_r16o1"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5msjb"]
 shader = ExtResource("3_7asrn")
-shader_parameter/waveform_color = Color(0.533333, 0.172549, 0.2, 1)
+shader_parameter/waveform_color = Color(1, 1, 1, 1)
 shader_parameter/offset = 0.0
-shader_parameter/width = 10.0
-shader_parameter/sample_rate = 44100.0
-shader_parameter/window = 6.0
+shader_parameter/page = 10.0
+shader_parameter/sample_rate = null
+
+[sub_resource type="Gradient" id="Gradient_nnnrn"]
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_r3jyk"]
+gradient = SubResource("Gradient_nnnrn")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_tebov"]
 shader = ExtResource("5_gmqmv")
+shader_parameter/textures_loaded = false
 shader_parameter/offset = null
 shader_parameter/page = 10.0
+shader_parameter/gradient = SubResource("GradientTexture1D_r3jyk")
 
 [sub_resource type="GDScript" id="GDScript_ewok4"]
 script/source = "@tool
@@ -49,7 +56,7 @@ script = ExtResource("1_dh4ot")
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 unique_name_in_owner = true
-stream = ExtResource("2_scm1q")
+stream = ExtResource("2_eguwb")
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 1
@@ -192,27 +199,24 @@ script = ExtResource("3_r3tf5")
 
 [node name="WaveformView" type="ColorRect" parent="MarginContainer/VBoxContainer/HBoxContainer/ViewPanelContainer/VBoxContainer/HBoxContainer/VisualizerView"]
 unique_name_in_owner = true
-material = SubResource("ShaderMaterial_r16o1")
+material = SubResource("ShaderMaterial_5msjb")
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
-anchor_bottom = 0.249
-offset_bottom = 0.269989
-grow_horizontal = 2
-grow_vertical = 2
+anchor_bottom = 0.25
 size_flags_vertical = 3
+script = ExtResource("6_j2wj6")
 
 [node name="SpectrogramView" type="ColorRect" parent="MarginContainer/VBoxContainer/HBoxContainer/ViewPanelContainer/VBoxContainer/HBoxContainer/VisualizerView"]
 unique_name_in_owner = true
 material = SubResource("ShaderMaterial_tebov")
 layout_mode = 1
-anchors_preset = 12
-anchor_top = 1.0
+anchors_preset = -1
+anchor_top = 0.25
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -549.0
 grow_horizontal = 2
-grow_vertical = 0
+grow_vertical = 2
 script = ExtResource("6_ixfxd")
 
 [node name="LabelView" type="Control" parent="MarginContainer/VBoxContainer/HBoxContainer/ViewPanelContainer/VBoxContainer/HBoxContainer/VisualizerView"]
@@ -247,7 +251,7 @@ color = Color(0.0627451, 0.0627451, 0.0627451, 1)
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 8
-max_value = 47.027
+max_value = 50.0
 page = 10.0
 
 [node name="ListPanelContainer" type="PanelContainer" parent="MarginContainer/VBoxContainer/HBoxContainer"]

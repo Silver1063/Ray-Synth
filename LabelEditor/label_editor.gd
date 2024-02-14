@@ -19,5 +19,3 @@ func on_files_dropped(files) -> void:
 		return
 	var audio_stream_wav: AudioStreamWAV = AudioStreamWAVLoader.load_from_path(files[0])
 	audio_stream_player.stream = audio_stream_wav
-	%VisualizerView.reload_shaders()
-	%SpectrogramView.render_shader()
